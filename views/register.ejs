@@ -1,0 +1,31 @@
+<%-include("partials/header.ejs")%>
+<div class="container mx-auto">
+<div class="display-2 text-center">Register</div>
+<form action="/register" method="POST">
+    <div class="form-group">
+      <label for="email">Email address</label>
+      <input type="email" name="email" class="form-control" aria-describedby="emailHelp">
+      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="role">Role</label>
+        <select class="form-control" name="role" id="">
+            <option value="Customer">Customer</option>
+            <option value="Seller">Seller</option>
+        </select>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" minlength="8" pattern="(?=.*\d)(?=.*[A-Za-z]).{8,}" name="password" class="form-control">
+    </div>
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+        <p>Already have an account, Click <a href="/login">here</a> to login!</p>
+    </div>
+  </form>
+</div>
+<%-include("partials/footer.ejs")%>
