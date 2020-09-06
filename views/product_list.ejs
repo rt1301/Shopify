@@ -1,0 +1,63 @@
+<%-include("partials/header.ejs")%>
+<div class="display-4">Check out our <%=type%> Section!</div>
+<%if(items.length!=0){%>
+    <%for(var i=0;i<items.length-1;i++){%>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="container my-4">
+                    <div class="card" style="width:500px">
+                        <img src="<%=items[i].image%>" class="img-thumbnail card-img-top" alt="...">
+                        <div class="card-body">
+                          <h5 class="card-title"><%=items[i].name%></h5>
+                          <p class="card-text"><%=items[i].description%></p>
+                          <p class="card-text">Price: $<span class="price" id="price<%=i%>"><%=items[i].price%></span></p>
+                          <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i]._id%>" method="POST">
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" name="quantity" class="form-control quantity" min="1" max="3">
+                            </div>
+                            <%if(Number(items[i].quantity)>=3){%>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                </div>
+                            <%}else{%>
+                                <div class="alert alert-primary" role="alert">
+                                    Sorry Out of Stock!
+                                </div>
+                            <%}%>
+                        </form>
+                        </div>
+                      </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="container my-4">
+                    <div class="card" style="width:500px">
+                        <img src="<%=items[i+1].image%>" class="img-thumbnail card-img-top" alt="...">
+                        <div class="card-body">
+                          <h5 class="card-title"><%=items[i+1].name%></h5>
+                          <p class="card-text"><%=items[i+1].description%></p>
+                          <p class="card-text">Price: $<span class="price" id="price<%=i+1%>"><%=items[i+1].price%></span></p>
+                          <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i+1]._id%>" method="POST">
+                              <div class="form-group">
+                                  <label for="quantity">Quantity</label>
+                                  <input type="number" name="quantity" class="form-control quantity" min="1" max="3">
+                              </div>
+                            <%if(Number(items[i+1].quantity)>=3){%>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                </div>
+                            <%}else{%>
+                                <div class="alert alert-primary" role="alert">
+                                    Sorry Out of Stock!
+                                </div>
+                            <%}%>
+                          </form>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    <%}%>
+<%}%>
+<%-include("partials/footer.ejs")%>

@@ -23,6 +23,14 @@
             <input type="number" min="1" step="1" required name="item[quantity]" class="form-control">
         </div>
         <div class="form-group">
+            <label for="">Category</label>
+            <select name="item[category]" class="form-control">
+                <option value="Electronics">Electronics</option>
+                <option value="Clothing">Clothing</option>
+                <option value="Groceries">Groceries</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label for="">Seller's Name</label>
             <input type="text" readonly name="item[sellerName]" value="<%=username%>" class="form-control">
         </div>

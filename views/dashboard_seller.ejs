@@ -5,27 +5,28 @@
         <hr class="my-4">
         <p>Add a new Item</p>
         <a class="btn btn-primary btn-lg" href="/seller/<%=user.username%>/new" role="button">Add Item</a>
-      </div>
+        <hr class="my-4">
+        <p>Check Arrived Orders</p>
+        <a class="btn btn-primary btn-lg" href="/seller/<%=user.username%>/orders">Arrived Orders</a>
+    </div>
 </div>
 <%if(items.length!=0){%>
-<%for(var i=0;i<items.length;i++){%>
-    <div class="row mt-4">
-        <div class="container">
-            <div class="col-md-6 mb-5">
-                <div class="card" style="width:500px">
-                    <img src="<%=items[i].image%>" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title"><%=items[i].name%></h5>
-                      <p class="card-text"><%=items[i].description%></p>
-                      <p class="card-text">Quantity: <span style="font-weight: bold;"><%=items[i].quantity%></span></p>
-                      <p class="card-text">Price: $<span style="font-weight: bold;"><%=items[i].price%></span></p>
-                    </div>
-                    
-                  </div>
-            </div>
+<div class="container d-flex">
+    <%for(var i=0;i<items.length;i++){%>
+        <div class="container my-4">
+            <div class="card" style="width:500px">
+                <img src="<%=items[i].image%>" class="img-thumbnail card-img-top" alt="...">
+                <div class="card-body">
+                  <h5 class="card-title"><%=items[i].name%></h5>
+                  <p class="card-text"><%=items[i].description%></p>
+                  <p class="card-text">Quantity: <span style="font-weight: bold;"><%=items[i].quantity%></span></p>
+                  <p class="card-text">Price: $<span style="font-weight: bold;"><%=items[i].price%></span></p>
+                </div>
+                <a href="/seller/<%=user.username%>/<%=items[i]._id%>/edit" class="btn btn-warning">Edit</a>
+              </div>
         </div>
-    </div>
-<%}%>
+    <%}%>
+</div>
 <%}%>
 
 <%-include("partials/footer.ejs")%>

@@ -1,0 +1,26 @@
+#electronics,#clothing,#groceries
+{
+    position: relative;
+    height: 200px;
+    width: 200px;
+    z-index: -1;
+}
+.product
+{
+    display: flex;
+    flex-direction: column;
+}
+.product-link
+{
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 20%;
+    color: black;
+    font-weight: bold;
+}
+.product:hover
+{
+    opacity: 0.8;
+    transition: opacity 1s;
+}

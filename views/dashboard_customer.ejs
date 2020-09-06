@@ -1,4 +1,27 @@
 <%-include("partials/header.ejs")%>
-<h1>Welcome to Customer Dashboard</h1>
-<h2><%=user.role%></h2>
+<div class="container my-4">
+    <div class="display-4 text-center">Welcome <%=user.username%></div>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="display-3">Past Orders</div>
+        <hr class="my-3">
+        <a href="/customer/<%=user.username%>/pastOrders" class="btn btn-primary">Past Orders</a>
+    </div>
+</div>
+<div class="container mb-5">
+    <div class="display-4">Check out New Products!</div>
+    <div class="row">
+        <div class="col-md-4 product">
+            <img class="img-thubmnail" id="electronics"  src="https://www.indcareer.com/files/B.E%20Electronics%20&%20Power%20Engineering.jpg" alt="">
+            <a class="product-link" href="/customer/<%=user.username%>/products/Electronics">Electronics</a>
+        </div>
+        <div class="col-md-4 product">
+            <img class="img-thumbnail" id="clothing" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" alt="">
+            <a class="product-link" href="/customer/<%=user.username%>/products/Clothing">Clothing</a>
+        </div>
+        <div class="col-md-4 product">
+            <img src="https://media.self.com/photos/599c997a774b667d3bbe1214/master/pass/groceries-family-month.jpg" class="img-thumbnail" id="groceries" alt="">
+            <a class="product-link"  href="/customer/<%=user.username%>/products/Groceries">Groceries</a>
+        </div>
+    </div>
+</div>
 <%-include("partials/footer.ejs")%>

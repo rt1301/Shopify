@@ -3,6 +3,7 @@ var express                 = require('express'),
     mongoose                = require('mongoose'),
     body                    = require('body-parser'),
     flash                   = require('connect-flash'),
+    methodOverride          = require('method-override'),
     passport				= require('passport'),
 	LocalStrategy			= require('passport-local'),
     passportLocalMongoose 	= require('passport-local-mongoose'),
@@ -11,7 +12,7 @@ var express                 = require('express'),
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect("mongodb://localhost:27017/shopify",{ useNewUrlParser: true, useUnifiedTopology: true, });
+mongoose.connect("mongodb://localhost:27017/shopify",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify:false });
 app.use(flash());
 // PASSPORT CONFIG
 app.use(require('express-session')({
@@ -32,6 +33,7 @@ app.use(function(req, res, next)
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+app.use(methodOverride("_method"));
 app.use(express.static(__dirname + "/public"));
 app.use(body.urlencoded({extended : true}));
 app.set("view engine","ejs");
@@ -49,7 +51,7 @@ app.get("/",isLoggedIn,(req, res)=>{
 // DashBoard Route - customer
 app.get("/customer/:id",isLoggedIn,(req, res)=>{
     var customer = req.params.id;
-    User.findOne({username:customer},(err,user)=>{
+    Item.find({},(err,items)=>{
         if(err)
         {
             req.flash("error",err.message);
@@ -57,9 +59,9 @@ app.get("/customer/:id",isLoggedIn,(req, res)=>{
         }
         else
         {
-            res.render("dashboard_customer",{user:user});
+            res.render("dashboard_customer",{user:req.user,items:items});
         }
-    });
+    })
 });
 // Dashboard Route - seller
 app.get("/seller/:id",isLoggedIn,(req,res)=>{
@@ -92,6 +94,126 @@ app.post("/seller/:id/new",isLoggedIn,(req,res)=>{
         {
             req.flash("success","Item Created");
             res.redirect("/seller/"+req.params.id);
+        }
+    });
+});
+
+// Edit Route
+app.get("/seller/:username/:id/edit",(req,res)=>{
+    var id = req.params.id;
+    Item.findById(id,(err,item)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            res.render("edit",{username:req.user.username,item:item});
+        }
+    });
+});
+app.put("/seller/:username/:id",(req,res)=>{
+    var id = req.params.id;
+    var data = req.body.item;
+    Item.findByIdAndUpdate(id,data,(err, updatedItem)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            res.redirect("/seller/"+req.params.username);
+        }
+    });
+});
+function compare(a, b) 
+{
+    // Use toUpperCase() to ignore character casing
+    const nameA = a.name.toUpperCase();
+    const nameB = b.name.toUpperCase();
+  
+    let comparison = 0;
+    if (nameA > nameB) {
+      comparison = 1;
+    } else if (nameA < nameB) {
+      comparison = -1;
+    }
+    return comparison;
+}
+// Products route
+app.get("/customer/:username/products/:type",(req, res)=>{
+    var type = req.params.type;
+    Item.find({category:type},(err,items)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            var sortedItems = items.sort(compare);
+            res.render("product_list",{user:req.user,items:sortedItems,type:type});
+        }
+    });
+});
+app.post("/customer/:username/products/:type/:id",(req, res)=>{
+    var type = req.params.type;
+    var id   = req.params.id;
+    var quantity = req.body.quantity;
+    Item.findById(id,(err,foundItem)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            var prevQuantity = foundItem.quantity;
+            var newQuantity = Number(prevQuantity) - Number(quantity);
+            foundItem.quantity = newQuantity.toString();
+            foundItem.save(function(err, updatedItem){
+                if(err)
+                {
+                    req.flash("error",err.message);
+                    res.redirect("back");
+                }
+                else
+                {
+                    User.find({username:req.params.username},(err,foundUser)=>{
+                        if(err)
+                        {
+                            req.flash("error",err.message);
+                            res.redirect("back");
+                        }
+                        else
+                        {
+                            var data = {
+                                item: updatedItem.name,
+                                quantity: quantity,
+                                price: updatedItem.price,
+                                date: new Date
+                            }
+                            console.log(foundUser[0],data);
+                            foundUser[0].productsInCart.push(data);
+                            foundUser[0].save((err,updatedUser)=>{
+                                if(err)
+                                {
+                                    req.flash("error",err.message);
+                                    res.redirect("back");
+                                }
+                                else
+                                {
+                                    req.flash("success","Product Added in Cart");
+                                    console.log(updatedUser);
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+            res.redirect("/customer/"+req.user.username+"/products/"+type);
         }
     });
 });
