@@ -99,7 +99,7 @@ app.post("/seller/:id/new",isLoggedIn,(req,res)=>{
 });
 
 // Edit Route
-app.get("/seller/:username/:id/edit",(req,res)=>{
+app.get("/seller/:username/:id/edit",isLoggedIn,(req,res)=>{
     var id = req.params.id;
     Item.findById(id,(err,item)=>{
         if(err)
@@ -113,7 +113,7 @@ app.get("/seller/:username/:id/edit",(req,res)=>{
         }
     });
 });
-app.put("/seller/:username/:id",(req,res)=>{
+app.put("/seller/:username/:id",isLoggedIn,(req,res)=>{
     var id = req.params.id;
     var data = req.body.item;
     Item.findByIdAndUpdate(id,data,(err, updatedItem)=>{
@@ -143,7 +143,7 @@ function compare(a, b)
     return comparison;
 }
 // Products route
-app.get("/customer/:username/products/:type",(req, res)=>{
+app.get("/customer/:username/products/:type",isLoggedIn,(req, res)=>{
     var type = req.params.type;
     Item.find({category:type},(err,items)=>{
         if(err)
@@ -158,7 +158,7 @@ app.get("/customer/:username/products/:type",(req, res)=>{
         }
     });
 });
-app.post("/customer/:username/products/:type/:id",(req, res)=>{
+app.post("/customer/:username/products/:type/:id",isLoggedIn,(req, res)=>{
     var type = req.params.type;
     var id   = req.params.id;
     var quantity = req.body.quantity;
@@ -192,10 +192,10 @@ app.post("/customer/:username/products/:type/:id",(req, res)=>{
                             var data = {
                                 item: updatedItem.name,
                                 quantity: quantity,
-                                price: updatedItem.price,
-                                date: new Date
+                                price: (Number(updatedItem.price)*Number(quantity)).toString(),
+                                date: new Date,
+                                id: updatedItem._id,
                             }
-                            console.log(foundUser[0],data);
                             foundUser[0].productsInCart.push(data);
                             foundUser[0].save((err,updatedUser)=>{
                                 if(err)
@@ -206,7 +206,6 @@ app.post("/customer/:username/products/:type/:id",(req, res)=>{
                                 else
                                 {
                                     req.flash("success","Product Added in Cart");
-                                    console.log(updatedUser);
                                 }
                             });
                         }
@@ -214,6 +213,201 @@ app.post("/customer/:username/products/:type/:id",(req, res)=>{
                 }
             });
             res.redirect("/customer/"+req.user.username+"/products/"+type);
+        }
+    });
+});
+// Function to check duplicate values in array
+const findDuplicates = (arr) => 
+{
+    let sorted_arr = arr.slice().sort();
+    let results = [];
+    for (let i = 0; i < sorted_arr.length - 1; i++) {
+      if (sorted_arr[i + 1] == sorted_arr[i]) {
+        results.push(sorted_arr[i]);
+      }
+    }
+    return results;
+}
+var initialQuantity = 0;
+// Cart Route
+app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
+    var products = req.user.productsInCart;
+    var itemNames = [];
+    var itemQuantities =0;
+    var itemPrices = 0;
+    var repObj = [];
+    var obj = [];
+    for(var i=0;i<products.length;i++)
+    {
+        itemNames.push(products[i].item);
+    }
+    var repeatedItems = findDuplicates(itemNames);
+    for(var i=0;i<repeatedItems.length;i++)
+    {
+        for(var j=0;j<products.length;j++)
+        {
+            if(products[j].item === repeatedItems[i])
+            {
+                itemQuantities+= Number(products[j].quantity);
+                itemPrices+= Number(products[j].price);
+            }
+            if(products[j].item !== repeatedItems[i])
+            {
+                obj.push(products[j]);
+            }
+
+        }
+        repObj.push({
+            item: repeatedItems[i],
+            quantity: itemQuantities.toString(),
+            price: itemPrices.toString(),
+            date: new Date,
+        });
+    }
+    User.find({username:req.user.username},(err, foundUser)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            if(repObj.concat(obj).length!==0)
+            {
+                foundUser[0].productsInCart = repObj.concat(obj);
+                foundUser[0].save();
+            }
+            
+        }
+    });
+    if(repObj.concat(obj).length!==0)
+    {
+        res.render("cart",{items:repObj.concat(obj)});
+    }
+    else
+    {
+        // console.log(products);
+        res.render("cart",{items:products});
+    }
+});
+// Edit Cart Items route
+app.get("/customer/:username/cart/:itemName/edit",isLoggedIn,(req, res)=>{
+var productName = req.params.itemName;
+User.findOne({username:req.user.username},(err,foundUser)=>{
+    if(err)
+    {
+        req.flash("error",err.message);
+        res.redirect("back");
+    }
+    else
+    {
+        Item.findOne({name:productName},(err,foundItem)=>{
+            for(var i=0;i<foundUser.productsInCart.length;i++)
+        {
+            if(foundUser.productsInCart[i].item === productName)
+            {
+                var products = foundUser.productsInCart[i];
+            }
+        }
+        initialQuantity = products.quantity;
+        res.render("edit_cart",{products:products,maxQuantity:foundItem.quantity});
+        })
+    }
+});
+});
+app.put("/customer/:username/cart/:item",isLoggedIn,(req,res)=>{
+    var updatedQuantity = Number(initialQuantity) - Number(req.body.quantity);
+    User.find({username:req.user.username},(err,foundUser)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            Item.findOne({name:req.params.item},(err,item)=>{
+                if(err)
+                {
+                    req.flash("error",err.message);
+                    res.redirect("back");
+                }
+                else
+                {
+                    for(var i=0;i<foundUser[0].productsInCart.length;i++)
+                    {
+                    if(foundUser[0].productsInCart[i].item === req.params.item)
+                    {
+                        foundUser[0].productsInCart[i].quantity = req.body.quantity.toString();
+                        foundUser[0].productsInCart[i].price = (Number(item.price)*Number(req.body.quantity)).toString();
+                    }
+                    }
+                    item.quantity = (Number(item.quantity)+updatedQuantity).toString();
+                    item.markModified('quantity');
+                    item.save();
+                    foundUser[0].markModified('productsInCart');
+                    foundUser[0].save((err,updatedUser)=>{
+                        console.log(updatedUser);
+                        req.flash("success","Product Edited");
+                        res.redirect("/customer/"+req.params.username+"/cart");
+                    });
+                }
+            });
+            
+        }
+        });
+    
+});
+// Remove element from array
+function removeItemOnce(arr, value) 
+{
+    var index = arr.indexOf(value);
+    if (index > -1) {
+      arr.splice(index, 1);
+    }
+    return arr;
+}
+// Delete product from Cart
+app.delete("/customer/:username/cart/:item",isLoggedIn,(req, res)=>{
+    User.findOne({username:req.params.username},(err,foundUser)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            Item.findOne({name:req.params.item},(err,item)=>{
+                if(err)
+                {
+                    req.flash("error",err.message);
+                    res.redirect("back");
+                }
+                else
+                {
+                    var removedQuantity;
+                    for(var i=0;i<foundUser.productsInCart.length;i++)
+                    {
+                        if(foundUser.productsInCart[i].item === req.params.item)
+                        {
+                            removedQuantity = foundUser.productsInCart[i].quantity;
+                            removeItemOnce(foundUser.productsInCart,foundUser.productsInCart[i]);
+                            console.log(foundUser.productsInCart);
+                        }
+                    }
+                    item.quantity = (Number(item.quantity) + Number(removedQuantity)).toString();
+                    item.markModified('quantity');
+                    item.save((err,updatedItem)=>{
+                        console.log(updatedItem.quantity);
+                    });
+                    foundUser.markModified('productsInCart');
+                    foundUser.save((err,updatedUser)=>
+                    {
+                        console.log(updatedUser);
+                        req.flash("success","Product Deleted");
+                        res.redirect("/customer/"+req.params.username+"/cart");
+                    });
+                }
+            });
         }
     });
 });
@@ -229,7 +423,6 @@ app.get("/register",function(req, res)
 app.post("/register",function(req,res)
 {
     var newUser = new User({username: req.body.username, email:req.body.email,role:req.body.role});
-    // var userInfo = {email:req.body.user.email,role:req.body.user.role};
     User.register(newUser,req.body.password,function(err, user)
     {
 		if(err)

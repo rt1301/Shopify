@@ -12,11 +12,30 @@
                           <p class="card-text"><%=items[i].description%></p>
                           <p class="card-text">Price: $<span class="price" id="price<%=i%>"><%=items[i].price%></span></p>
                           <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i]._id%>" method="POST">
-                            <div class="form-group">
-                                <label for="quantity">Quantity</label>
-                                <input type="number" name="quantity" class="form-control quantity" min="1" max="3">
-                            </div>
                             <%if(Number(items[i].quantity)>=3){%>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control quantity" min="1" max="3">
+                                    <small>Max 3 units per Customer</small>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                </div>
+                            <%}else if(Number(items[i].quantity) == 2){%>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control quantity" min="1" max="2">
+                                    <small>Only 2 units left!</small>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                </div>
+                            <%}else if(Number(items[i].quantity) == 1){%>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control quantity" min="1" max="1">
+                                    <small>Only 1 unit left!</small>
+                                </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary" type="submit">Add to Cart</button>
                                 </div>
@@ -39,11 +58,30 @@
                           <p class="card-text"><%=items[i+1].description%></p>
                           <p class="card-text">Price: $<span class="price" id="price<%=i+1%>"><%=items[i+1].price%></span></p>
                           <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i+1]._id%>" method="POST">
-                              <div class="form-group">
-                                  <label for="quantity">Quantity</label>
-                                  <input type="number" name="quantity" class="form-control quantity" min="1" max="3">
-                              </div>
                             <%if(Number(items[i+1].quantity)>=3){%>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control quantity" min="1" max="3">
+                                    <small>Max 3 units per Customer</small>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                </div>
+                            <%}else if(Number(items[i+1].quantity) == 2){%>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control quantity" min="1" max="2">
+                                    <small>Only 2 units left!</small>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="submit">Add to Cart</button>
+                                </div>
+                            <%}else if(Number(items[i+1].quantity) == 1){%>
+                                <div class="form-group">
+                                    <label for="quantity">Quantity</label>
+                                    <input type="number" name="quantity" class="form-control quantity" min="1" max="1">
+                                    <small>Only 1 unit left!</small>
+                                </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary" type="submit">Add to Cart</button>
                                 </div>
