@@ -1,39 +1,46 @@
 <%-include("partials/header.ejs")%>
 <div class="container mx-auto">
     <div class="display-4 text-center">Cart for <%=currentUser.username%></div>
-    <%for(var i=0;i<items.length;i+=2){%>
-        <div class="row my-4 mx-auto">
-            <div class="col-md-6">
-               <div class="card" style="width: 18rem;">
-                   <div class="card-body">
-                       <h5 class="card-title"><%=items[i].item%></h5>
-                       <h6 class="card-subtitle mb-2">Quantity: <%=items[i].quantity%></h6>
-                       <p class="card-text">Price: $<%=items[i].price%></p>
-                       <a href="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>/edit" class="btn btn-warning">Edit</a>
-                    <form action="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>?_method=DELETE" method="POST" style="display: inline;">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                   </div>
-                   <a href="" class="btn btn-primary">Checkout</a>
-               </div>
-            </div>
-            <%if(items[i+1]){%>
-                <div class="col-md-6">
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title"><%=items[i+1].item%></h5>
-                            <h6 class="card-subtitle mb-2">Quantity: <%=items[i+1].quantity%></h6>
-                            <p class="card-text">Price: $<%=items[i+1].price%></p>
-                            <a href="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>/edit" class="btn btn-warning">Edit</a>
-                            <form action="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>?_method=DELETE" method="POST" style="display: inline;">
+    <div class="container my-5 text-center">
+        <%if(items.length!==0){%>
+            <%for(var i=0;i<items.length;i+=2){%>
+                <div class="row my-4 mx-auto">
+                    <div class="col-md-6">
+                       <div class="card" style="width: 18rem;">
+                        <img src="<%=items[i].image%>" class="img-thumbnail" alt="">
+                           <div class="card-body">
+                               <h5 class="card-title"><%=items[i].item%></h5>
+                               <h6 class="card-subtitle mb-2">Quantity: <%=items[i].quantity%></h6>
+                               <p class="card-text">Price: $<%=items[i].price%></p>
+                               <a href="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>/edit" class="btn btn-warning">Edit</a>
+                            <form action="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>?_method=DELETE" method="POST" style="display: inline;">
                                 <button class="btn btn-danger" type="submit">Delete</button>
                             </form>
-                        </div>
-                        <a href="" class="btn btn-primary">Checkout</a>
+                           </div>
+                       </div>
                     </div>
+                    <%if(items[i+1]){%>
+                        <div class="col-md-6">
+                            <div class="card" style="width: 18rem;">
+                                <img src="<%=items[i].image%>" class="img-thumbnail" alt="">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%=items[i+1].item%></h5>
+                                    <h6 class="card-subtitle mb-2">Quantity: <%=items[i+1].quantity%></h6>
+                                    <p class="card-text">Price: $<%=items[i+1].price%></p>
+                                    <a href="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>/edit" class="btn btn-warning">Edit</a>
+                                    <form action="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>?_method=DELETE" method="POST" style="display: inline;">
+                                        <button class="btn btn-danger" type="submit">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <%}%>
                 </div>
             <%}%>
-        </div>
-    <%}%>
+            <a href="/customer/<%=currentUser.username%>/checkout" class="btn btn-primary btn-large">Checkout</a>
+        <%}else{%>
+            <div class="alert alert-primary text-center">Cart is Empty</div>
+        <%}%>
+    </div>
 </div>
 <%-include("partials/footer.ejs")%>

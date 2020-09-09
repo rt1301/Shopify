@@ -6,7 +6,8 @@ var itemSchema = new mongoose.Schema({
     price:String,
     quantity:String,
     sellerName:String,
-    category:String
+    category:String,
+    purchased: {type:Boolean, default:false}
 });
 
 module.exports = mongoose.model("Item",itemSchema);

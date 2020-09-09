@@ -1,0 +1,17 @@
+<%-include("partials/header.ejs")%>
+<div class="display-4 text-center">Past Orders for <%=currentUser.username%></div>
+<div class="container text-center">
+    <%for(var i=0;i<items.length;i++){%>
+       <%if(items[i].item){%>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><%=items[i].item%></h5>
+                <h6>Quantity: <%=items[i].quantity%></h6>
+                <h6>Price: $ <%=items[i].price%></h6>
+                <h6>Ordered On: <span id="date"><%=items[i].date%></span></h6>
+            </div>
+        </div>
+       <%}%>
+    <%}%>
+</div>
+<%-include("partials/footer.ejs")%>

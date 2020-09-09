@@ -1,0 +1,158 @@
+<%-include("partials/header.ejs")%>
+<div class="display-4 text-center">Payments Page</div>
+<div class="container my-5">
+    <div class="card">
+        <div class="card-body">
+            <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <%for(var i=0;i<products.length;i++){%>
+                    <tr>
+                        <th scope="row"><%=i%></th>
+                        <td class="product-name"><%=products[i].item%></td>
+                        <td>$ <span class="price"><%=products[i].price%></span></td>
+                    </tr>
+                  <%}%>
+                </tbody>
+              </table>
+              <p class="lead">Total Checkout Price: <span id="price"></span></p>
+        </div>
+    </div>
+</div>
+<div class="row my-5 mx-5">
+    <div class="col-md-4">
+        <p class="lead">Payment Mode</p>
+        <div class="list-group">
+            <div class="list-group-item active" id="cash">
+                Cash
+            </div>
+            <div class="list-group-item" id="debit">
+                Debit Card
+            </div>
+            <div class="list-group-item" id="credit">
+                Credit Card
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mt-5">
+        <div class="container text-center">
+            <form action="/customer/<%=currentUser.username%>/checkout/payment" method="POST">
+                <div class="container" id="cash-container">
+                    <div class="form-group">
+                        <input type="text" readonly name="payment[mode]" value="Cash" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="text" name="payment[price]" readonly id="cash-payment" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Pay</button>
+                    </div>
+                </div>
+            </form>
+            <form action="/customer/<%=currentUser.username%>/checkout/payment" method="POST">
+                <div class="container hide" id="debit-container">
+                    <div class="form-group">
+                        <input type="text" readonly name="payment[mode]"  value="Debit Card" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Card Number</label>
+                      <input type="text" required name="payment[cardNo]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Expiry Date</label>
+                        <input type="date" required name="payment[cardExp]" class="form-control">
+                        <label for="">CVV</label>
+                        <input type="password" maxlength="3" name="payment[cardCvv]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="text" name="payment[price]" readonly id="debitCard-payment" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Pay</button>
+                    </div>
+                </div>
+            </form>
+            <form action="/customer/<%=currentUser.username%>/checkout/payment" method="POST">
+                <div class="container hide" id="credit-container">
+                    <div class="form-group">
+                        <input type="text" readonly name="payment[mode]"  value="Credit Card" class="form-control">
+                    </div>
+                    <div class="form-group">
+                      <label for="">Card Number</label>
+                      <input type="text" required name="payment[cardNo]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Expiry Date</label>
+                        <input type="date" required name="payment[cardExp]" class="form-control">
+                        <label for="">CVV</label>
+                        <input type="password" maxlength="3" name="payment[cardCvv]" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Price</label>
+                        <input type="text" name="payment[price]" readonly id="creditCard-payment" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">Pay</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var priceTab = document.querySelectorAll(".price");
+    var totalCheckoutPrice = 0;
+    var priceInputCash = document.getElementById("cash-payment");
+    var priceInputDebit = document.getElementById("debitCard-payment");
+    var priceInputCredit = document.getElementById("creditCard-payment");
+    var cashContainer = document.getElementById("cash-container");
+    var debitContainer = document.getElementById("debit-container");
+    var creditContainer = document.getElementById("credit-container");
+    var cash = document.getElementById("cash");
+    var credit = document.getElementById("credit");
+    var debit = document.getElementById("debit");
+    for(var i=0;i<priceTab.length;i++)
+    {
+        if(priceTab[i].innerHTML!== 'NaN')
+        {
+            totalCheckoutPrice+= Number(priceTab[i].innerHTML);
+        }
+    }
+    priceInputCash.value = `$ ${totalCheckoutPrice}`;
+    priceInputDebit.value = `$ ${totalCheckoutPrice}`;
+    priceInputCredit.value = `$ ${totalCheckoutPrice}`;
+    document.getElementById("price").innerHTML = `<strong>$${totalCheckoutPrice.toString()}</strong>`;
+    cash.addEventListener("click",()=>{
+        cashContainer.classList.remove("hide");
+        debitContainer.classList.add("hide");
+        creditContainer.classList.add("hide");
+        cash.classList.add("active");
+        credit.classList.remove("active");
+        debit.classList.remove("active");
+    });
+    debit.addEventListener("click",()=>{
+        cashContainer.classList.add("hide");
+        debitContainer.classList.remove("hide");
+        creditContainer.classList.add("hide");
+        cash.classList.remove("active");
+        credit.classList.remove("active");
+        debit.classList.add("active");
+    });
+    credit.addEventListener("click",()=>{
+        cashContainer.classList.add("hide");
+        debitContainer.classList.add("hide");
+        creditContainer.classList.remove("hide");
+        cash.classList.remove("active");
+        credit.classList.add("active");
+        debit.classList.remove("active");
+    });
+</script>
+<%-include("partials/footer.ejs")%>

@@ -8,6 +8,7 @@ var express                 = require('express'),
 	LocalStrategy			= require('passport-local'),
     passportLocalMongoose 	= require('passport-local-mongoose'),
     Item                    = require("./models/items.js"),
+    Payment                 = require("./models/payment.js"),
     User 					= require("./models/user.js");
 
 mongoose.set('useNewUrlParser', true);
@@ -128,6 +129,48 @@ app.put("/seller/:username/:id",isLoggedIn,(req,res)=>{
         }
     });
 });
+// Arrived Orders route
+var arrivedOrders = [];
+
+app.get("/seller/:username/orders",isLoggedIn,(req, res)=>{
+    User.find({role:'Customer'},(err,foundUsers)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            for(var i=0;i<foundUsers.length;i++)
+            {
+                for(var j=0;j<foundUsers[i].history.length;j++)
+                {
+                    if(foundUsers[i].history[j].seller === req.user.username)
+                    {
+                        arrivedOrders.push(foundUsers[i].history[j]);
+                    }
+                }
+            }
+        }
+    });
+    User.findOne({username:req.params.username},(err,seller)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            for(var i=0;i<arrivedOrders.length;i++)
+            {
+                seller.history[i] = arrivedOrders[i];
+            }
+            seller.markModified('history');
+            seller.save();
+            res.render("arrived_orders",{items:seller.history});
+            arrivedOrders = [];
+        }
+    });
+});
 function compare(a, b) 
 {
     // Use toUpperCase() to ignore character casing
@@ -195,6 +238,8 @@ app.post("/customer/:username/products/:type/:id",isLoggedIn,(req, res)=>{
                                 price: (Number(updatedItem.price)*Number(quantity)).toString(),
                                 date: new Date,
                                 id: updatedItem._id,
+                                seller: updatedItem.sellerName,
+                                image: updatedItem.image
                             }
                             foundUser[0].productsInCart.push(data);
                             foundUser[0].save((err,updatedUser)=>{
@@ -205,6 +250,7 @@ app.post("/customer/:username/products/:type/:id",isLoggedIn,(req, res)=>{
                                 }
                                 else
                                 {
+                                    console.log(updatedUser);
                                     req.flash("success","Product Added in Cart");
                                 }
                             });
@@ -216,6 +262,21 @@ app.post("/customer/:username/products/:type/:id",isLoggedIn,(req, res)=>{
         }
     });
 });
+// Past Orders Route
+app.get("/customer/:username/pastOrders",isLoggedIn,(req, res)=>{
+    User.findOne({username:req.params.username},(err, foundUser)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect('back');
+        }
+        else
+        {
+            res.render("past_order",{items:foundUser.history});
+        }
+    })
+    
+})
 // Function to check duplicate values in array
 const findDuplicates = (arr) => 
 {
@@ -235,6 +296,9 @@ app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
     var itemNames = [];
     var itemQuantities =0;
     var itemPrices = 0;
+    var itemImage;
+    var itemSeller;
+    var itemId;
     var repObj = [];
     var obj = [];
     for(var i=0;i<products.length;i++)
@@ -250,6 +314,9 @@ app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
             {
                 itemQuantities+= Number(products[j].quantity);
                 itemPrices+= Number(products[j].price);
+                itemImage = products[j].image;
+                itemSeller = products[j].seller;
+                itemId = products[j].id;
             }
             if(products[j].item !== repeatedItems[i])
             {
@@ -262,6 +329,9 @@ app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
             quantity: itemQuantities.toString(),
             price: itemPrices.toString(),
             date: new Date,
+            image:  itemImage,
+            seller: itemSeller,
+            id: itemId
         });
     }
     User.find({username:req.user.username},(err, foundUser)=>{
@@ -406,6 +476,47 @@ app.delete("/customer/:username/cart/:item",isLoggedIn,(req, res)=>{
                         req.flash("success","Product Deleted");
                         res.redirect("/customer/"+req.params.username+"/cart");
                     });
+                }
+            });
+        }
+    });
+});
+// Checkout Page
+app.get("/customer/:username/checkout",isLoggedIn,(req, res)=>{
+    res.render("checkout",{products:req.user.productsInCart});
+});
+app.post("/customer/:username/checkout/payment",isLoggedIn,(req, res)=>{
+    var paymentDetails = req.body.payment;
+    User.findOne({username:req.params.username},(err,foundUser)=>{
+        if(err)
+        {
+            req.flash("error",err.message);
+            res.redirect("back");
+        }
+        else
+        {
+            for(var i=0;i<foundUser.productsInCart.length;i++)
+            {
+                foundUser.history[i] = foundUser.productsInCart[i];
+            }
+            foundUser.markModified('history');
+            Payment.create(paymentDetails,(err,payment)=>{
+                if(err)
+                {
+                    req.flash("error",err.message);
+                }
+                else
+                {
+                    foundUser.productsInCart.splice(0,foundUser.productsInCart.length);
+                    foundUser.markModified('productsInCart');
+                    foundUser.save((err,updatedUser)=>{
+                        if(err)
+                        {
+                            console.log(err);
+                        }
+                    });
+                    req.flash("success","Payment Successfully Done");
+                    res.redirect("/customer/"+req.params.username);
                 }
             });
         }
