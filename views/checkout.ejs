@@ -1,106 +1,132 @@
 <%-include("partials/header.ejs")%>
-<div class="display-4 text-center">Payments Page</div>
+<h3 class="center-align">Payments Page</div>
 <div class="container my-5">
-    <div class="card">
-        <div class="card-body">
-            <table class="table">
-                <thead class="thead-dark">
+    <div class="card hoverable">
+        <div class="card-content">
+            <table class="highlight">
+                <thead class="grey darken-4 blue-text text-lighten-5">
                   <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Product Name</th>
-                    <th scope="col">Price</th>
+                    <th scope="col"><h6>No.</h6></th>
+                    <th scope="col"><h6>Product Name</h6></th>
+                    <th scope="col"><h6>Price</h6></th>
                   </tr>
                 </thead>
                 <tbody>
                   <%for(var i=0;i<products.length;i++){%>
                     <tr>
-                        <th scope="row"><%=i%></th>
-                        <td class="product-name"><%=products[i].item%></td>
-                        <td>$ <span class="price"><%=products[i].price%></span></td>
+                        <th scope="row"><h6><%=i+1%></h6></th>
+                        <td class="product-name"><h6><%=products[i].item%></h6></td>
+                        <td><h6>$ <span class="price"><%=products[i].price%></span></h6></td>
                     </tr>
                   <%}%>
                 </tbody>
               </table>
-              <p class="lead">Total Checkout Price: <span id="price"></span></p>
+        </div>
+        <div class="card-action">
+            <h5>Total Checkout Price: <span id="price"></span></h5>
         </div>
     </div>
 </div>
 <div class="row my-5 mx-5">
-    <div class="col-md-4">
-        <p class="lead">Payment Mode</p>
-        <div class="list-group">
-            <div class="list-group-item active" id="cash">
-                Cash
-            </div>
-            <div class="list-group-item" id="debit">
-                Debit Card
-            </div>
-            <div class="list-group-item" id="credit">
-                Credit Card
-            </div>
-        </div>
+    <div class="col s12 m4">
+        <ul class="collection with-header">
+            <li class="collection-header"><h5>Payment Mode</h5></li>
+            <li class="collection-item active" id="cash"><h5>Cash</h5></li>
+            <li class="collection-item" id="debit"><h5>Debit Card</h5></li>
+            <li class="collection-item" id="credit"><h5>Credit Card</h5></li>
+        </ul>
     </div>
-    <div class="col-md-8 mt-5">
-        <div class="container text-center">
+    <div class="col s12 m8 mt-5">
+        <div class="container center-align">
             <form action="/customer/<%=currentUser.username%>/checkout/payment" method="POST">
                 <div class="container" id="cash-container">
-                    <div class="form-group">
-                        <input type="text" readonly name="payment[mode]" value="Cash" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" readonly name="payment[mode]" value="Cash">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input type="text" name="payment[price]" readonly id="cash-payment" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <h6>Price</h6>
+                            <input type="text" name="payment[price]" class="price" readonly id="cash-payment">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Pay</button>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <button class="btn waves-effect waves-light" type="submit">Pay</button>
+                        </div>
                     </div>
                 </div>
             </form>
             <form action="/customer/<%=currentUser.username%>/checkout/payment" method="POST">
                 <div class="container hide" id="debit-container">
-                    <div class="form-group">
-                        <input type="text" readonly name="payment[mode]"  value="Debit Card" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" readonly name="payment[mode]"  value="Debit Card">
+                        </div>
                     </div>
-                    <div class="form-group">
-                      <label for="">Card Number</label>
-                      <input type="text" required name="payment[cardNo]" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="">Card Number</label>
+                            <input type="text" required name="payment[cardNo]">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Expiry Date</label>
-                        <input type="date" required name="payment[cardExp]" class="form-control">
-                        <label for="">CVV</label>
-                        <input type="password" maxlength="3" name="payment[cardCvv]" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <label for="">Expiry Date</label>
+                            <input type="text" class="datepicker" required name="payment[cardExp]">
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <label for="">CVV</label>
+                            <input type="password" maxlength="3" name="payment[cardCvv]">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input type="text" name="payment[price]" readonly id="debitCard-payment" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="price">Price</label>
+                            <input type="text" name="payment[price]" class="price" readonly id="debitCard-payment">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Pay</button>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <button class="btn waves-effect waves-light" type="submit">Pay</button>
+                        </div>
                     </div>
                 </div>
             </form>
             <form action="/customer/<%=currentUser.username%>/checkout/payment" method="POST">
                 <div class="container hide" id="credit-container">
-                    <div class="form-group">
-                        <input type="text" readonly name="payment[mode]"  value="Credit Card" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" readonly name="payment[mode]"  value="Credit Card">
+                        </div>
                     </div>
-                    <div class="form-group">
-                      <label for="">Card Number</label>
-                      <input type="text" required name="payment[cardNo]" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="">Card Number</label>
+                            <input type="text" required name="payment[cardNo]">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="">Expiry Date</label>
-                        <input type="date" required name="payment[cardExp]" class="form-control">
-                        <label for="">CVV</label>
-                        <input type="password" maxlength="3" name="payment[cardCvv]" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12 m6">
+                            <label for="">Expiry Date</label>
+                            <input type="text" class="datepicker" required name="payment[cardExp]">
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <label for="">CVV</label>
+                            <input type="password" maxlength="3" name="payment[cardCvv]">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="price">Price</label>
-                        <input type="text" name="payment[price]" readonly id="creditCard-payment" class="form-control">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <label for="price">Price</label>
+                            <input type="text" name="payment[price]" class="price" readonly id="creditCard-payment">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">Pay</button>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <button class="btn waves-effect waves-light" type="submit">Pay</button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -116,9 +142,9 @@
     var cashContainer = document.getElementById("cash-container");
     var debitContainer = document.getElementById("debit-container");
     var creditContainer = document.getElementById("credit-container");
-    var cash = document.getElementById("cash");
-    var credit = document.getElementById("credit");
-    var debit = document.getElementById("debit");
+    var cashTab = document.getElementById("cash");
+    var creditTab = document.getElementById("credit");
+    var debitTab = document.getElementById("debit");
     for(var i=0;i<priceTab.length;i++)
     {
         if(priceTab[i].innerHTML!== 'NaN')
@@ -130,29 +156,33 @@
     priceInputDebit.value = `$ ${totalCheckoutPrice}`;
     priceInputCredit.value = `$ ${totalCheckoutPrice}`;
     document.getElementById("price").innerHTML = `<strong>$${totalCheckoutPrice.toString()}</strong>`;
-    cash.addEventListener("click",()=>{
+    cashTab.addEventListener("click",()=>{
         cashContainer.classList.remove("hide");
         debitContainer.classList.add("hide");
         creditContainer.classList.add("hide");
-        cash.classList.add("active");
-        credit.classList.remove("active");
-        debit.classList.remove("active");
+        cashTab.classList.add("active");
+        creditTab.classList.remove("active");
+        debitTab.classList.remove("active");
     });
-    debit.addEventListener("click",()=>{
+    debitTab.addEventListener("click",()=>{
         cashContainer.classList.add("hide");
         debitContainer.classList.remove("hide");
         creditContainer.classList.add("hide");
-        cash.classList.remove("active");
-        credit.classList.remove("active");
-        debit.classList.add("active");
+        cashTab.classList.remove("active");
+        creditTab.classList.remove("active");
+        debitTab.classList.add("active");
     });
-    credit.addEventListener("click",()=>{
+    creditTab.addEventListener("click",()=>{
         cashContainer.classList.add("hide");
         debitContainer.classList.add("hide");
         creditContainer.classList.remove("hide");
-        cash.classList.remove("active");
-        credit.classList.add("active");
-        debit.classList.remove("active");
+        cashTab.classList.remove("active");
+        creditTab.classList.add("active");
+        debitTab.classList.remove("active");
     });
+    $(document).ready(function(){
+    
+    $('.datepicker').datepicker({format:String});
+  });
 </script>
 <%-include("partials/footer.ejs")%>

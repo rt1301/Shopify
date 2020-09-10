@@ -1,29 +1,66 @@
 <%-include("partials/header.ejs")%>
 <div class="container text-center mt-4">
-    <div class="jumbotron jumbotron-fluid">
-        <h1 class="display-4">Hello, <%=user.username%></h1>
-        <hr class="my-4">
-        <p>Add a new Item</p>
-        <a class="btn btn-primary btn-lg" href="/seller/<%=user.username%>/new" role="button">Add Item</a>
-        <hr class="my-4">
-        <p>Check Arrived Orders</p>
-        <a class="btn btn-primary btn-lg" href="/seller/<%=user.username%>/orders">Arrived Orders</a>
+    <h4 class="center-align">Welcome <%=user.username%></h4>
+    <div class="container center-align">
+        <div class="row">
+            <div class="col m12">
+              <div class="card blue-grey darken-1">
+                <div class="card-action hoverable">
+                    <h5 class="white-text">Add a new Item</h5>
+                    <a class="waves-effect waves-light btn" href="/seller/<%=user.username%>/new" role="button">Add Item</a>
+                    <hr class="my-4">
+                    <h5 class="white-text">Check Arrived Orders</h5>
+                    <a class="waves-effect waves-light btn" href="/seller/<%=user.username%>/orders">Arrived Orders</a>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
 </div>
 <%if(items.length!=0){%>
-<div class="container d-flex">
-    <%for(var i=0;i<items.length;i++){%>
-        <div class="container my-4">
-            <div class="card" style="width:500px">
-                <img src="<%=items[i].image%>" class="img-thumbnail" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title"><%=items[i].name%></h5>
-                  <p class="card-text"><%=items[i].description%></p>
-                  <p class="card-text">Quantity: <span style="font-weight: bold;"><%=items[i].quantity%></span></p>
-                  <p class="card-text">Price: $<span style="font-weight: bold;"><%=items[i].price%></span></p>
+<div class="container">
+    <%for(var i=0;i<items.length;i+=2){%>
+        <div class="row">
+            <div class="col s12 m6">
+                <div class="card hoverable sticky-action">
+                    <div class="card-image">
+                     <img src="<%=items[i].image%>" class="responsive-image activator" alt="...">
+                    </div>
+                     <div class="card-content">
+                     <h6 class="card-title activator grey-text text-darken-4"><%=items[i].name%><i class="material-icons right">more_vert</i></h6>
+                     <div class="card-action">
+                         <a href="/seller/<%=user.username%>/<%=items[i]._id%>/edit" class="waves-effect orange lighten-1 btn">Edit</a>
+                     </div>
+                   </div>
+                   <div class="card-reveal">
+                     <span class="card-title grey-text text-darken-4"><%=items[i].name%><i class="material-icons right">close</i></span>
+                     <p><%=items[i].description%></p>
+                     <p>Quantity: <span style="font-weight: bold;"><%=items[i].quantity%></span></p>
+                     <p>Price: $<span style="font-weight: bold;"><%=items[i].price%></span></p>
+                   </div>
+                   </div>
+            </div>
+        <%if(items[i+1]){%>
+                <div class="col s12 m6">
+                    <div class="card hoverable sticky-action">
+                        <div class="card-image">
+                         <img src="<%=items[i+1].image%>" class="responsive-image activator" alt="...">
+                        </div>
+                    <div class="card-content">
+                     <h6 class="card-title activator grey-text text-darken-4"><%=items[i+1].name%><i class="material-icons right">more_vert</i></h6>
+                     <div class="card-action">
+                         <a href="/seller/<%=user.username%>/<%=items[i+1]._id%>/edit" class="waves-effect orange lighten-1 btn">Edit</a>
+                     </div>
+                   </div>
+                   <div class="card-reveal">
+                     <span class="card-title grey-text text-darken-4"><%=items[i+1].name%><i class="material-icons right">close</i></span>
+                     <p><%=items[i].description%></p>
+                     <p>Quantity: <span style="font-weight: bold;"><%=items[i+1].quantity%></span></p>
+                     <p>Price: $<span style="font-weight: bold;"><%=items[i+1].price%></span></p>
+                   </div>
+                   </div>
                 </div>
-                <a href="/seller/<%=user.username%>/<%=items[i]._id%>/edit" class="btn btn-warning">Edit</a>
-              </div>
+        <%}%>
         </div>
     <%}%>
 </div>

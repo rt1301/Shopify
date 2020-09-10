@@ -1,17 +1,23 @@
 <%-include("partials/header.ejs")%>
-<div class="display-4 text-center">Past Orders for <%=currentUser.username%></div>
-<div class="container text-center">
+<div class="container center-align"><h3 class="center-align">Past Orders for <%=currentUser.username%></h3></div>
+<div class="container center-align">
     <%for(var i=0;i<items.length;i++){%>
-       <%if(items[i].item){%>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title"><%=items[i].item%></h5>
-                <h6>Quantity: <%=items[i].quantity%></h6>
-                <h6>Price: $ <%=items[i].price%></h6>
-                <h6>Ordered On: <span id="date"><%=items[i].date%></span></h6>
+        <div class="row">
+            <div class="col m12">
+                <%if(items[i].item){%>
+                   <div class="container">
+                    <div class="card hoverable">
+                        <h5><%=items[i].item%></h5>
+                        <div class="card-content">
+                            <h6>Quantity: <%=items[i].quantity%></h6>
+                            <h6>Price: $ <%=items[i].price%></h6>
+                            <h6>Ordered On: <span id="date"><%=items[i].date%></span></h6>
+                        </div>
+                    </div>
+                   </div>
+                   <%}%>
             </div>
         </div>
-       <%}%>
     <%}%>
 </div>
 <%-include("partials/footer.ejs")%>

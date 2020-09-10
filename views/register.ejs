@@ -1,31 +1,52 @@
 <%-include("partials/header.ejs")%>
 <div class="container mx-auto">
-<div class="display-2 text-center">Register</div>
-<form action="/register" method="POST">
-    <div class="form-group">
-      <label for="email">Email address</label>
-      <input type="email" name="email" class="form-control" aria-describedby="emailHelp">
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+<h3 class="center-align">Register</h3>
+<form action="/register" method="POST" class="my-5">
+  <div class="container">
+    <div class="row">
+      <div class="input-field col s12">
+        <label for="email">Email address</label>
+        <input type="email" required name="email" aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      </div>
     </div>
-    <div class="form-group">
+    <div class="row">
+      <div class="input-field col s12">
         <label for="username">Username</label>
-        <input type="text" name="username" class="form-control">
+        <input type="text" required name="username">
+      </div>
     </div>
-    <div class="form-group">
-        <label for="role">Role</label>
-        <select class="form-control" name="role" id="">
-            <option value="Customer">Customer</option>
-            <option value="Seller">Seller</option>
-        </select>
+    <div class="row">
+      <div class="input-field col s12">
+          <select required name="role" id="">
+              <option value="" disabled selected>Role</option>
+              <option value="Customer">Customer</option>
+              <option value="Seller">Seller</option>
+          </select>
+          <label for="role">Role</label>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" minlength="8" pattern="(?=.*\d)(?=.*[A-Za-z]).{8,}" name="password" class="form-control">
+    <div class="row">
+      <div class="input-field col s12">
+        <label for="password">Password</label>
+        <input type="password" minlength="8" pattern="(?=.*\d)(?=.*[A-Za-z]).{8,}" name="password" class="form-control">
+      </div>
     </div>
-    <div class="form-group text-center">
-        <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+    <div class="row">
+      <div class="input-field col s12">
+        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+          <i class="material-icons right">send</i>
+        </button>
         <p>Already have an account, Click <a href="/login">here</a> to login!</p>
+      </div>
     </div>
+  </div>
   </form>
 </div>
+
+<script>
+  $(document).ready(function(){
+  $('select').formSelect();
+});
+</script>
 <%-include("partials/footer.ejs")%>

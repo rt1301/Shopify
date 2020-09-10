@@ -1,45 +1,59 @@
 <%-include("partials/header.ejs")%>
-<div class="container mx-auto">
-    <div class="display-4 text-center">Cart for <%=currentUser.username%></div>
-    <div class="container my-5 text-center">
+<div class="container">
+    <h3 class="center-align">Cart for <%=currentUser.username%></h3>
+    <div class="container center-align">
         <%if(items.length!==0){%>
+            <div class="container center-align my-5">
+                <a href="/customer/<%=currentUser.username%>/checkout" class="waves-effect blue lighten-1 btn hoverable">Checkout</a>
+            </div>
             <%for(var i=0;i<items.length;i+=2){%>
-                <div class="row my-4 mx-auto">
-                    <div class="col-md-6">
-                       <div class="card" style="width: 18rem;">
-                        <img src="<%=items[i].image%>" class="img-thumbnail" alt="">
-                           <div class="card-body">
-                               <h5 class="card-title"><%=items[i].item%></h5>
-                               <h6 class="card-subtitle mb-2">Quantity: <%=items[i].quantity%></h6>
-                               <p class="card-text">Price: $<%=items[i].price%></p>
-                               <a href="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>/edit" class="btn btn-warning">Edit</a>
-                            <form action="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>?_method=DELETE" method="POST" style="display: inline;">
-                                <button class="btn btn-danger" type="submit">Delete</button>
-                            </form>
-                           </div>
-                       </div>
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <div class="container">
+                                <div class="card hoverable" style="width: 300px;">
+                                    <div class="card-image">
+                                        <img src="<%=items[i].image%>" alt="" class="responsive-image">
+                                    </div>
+                                    <div class="card-content">
+                                        <h5 class="card-title"><%=items[i].item%></h5>
+                                        <h6>Quantity: <%=items[i].quantity%></h5>
+                                        <h6>Price: $<%=items[i].price%></h5>
+                                    </div>
+                                    <div class="card-action">
+                                        <a class="waves-effect orange lighten-1 btn" href="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>/edit">Edit</a>
+                                        <form action="/customer/<%=currentUser.username%>/cart/<%=items[i].item%>?_method=DELETE" method="POST" style="display: inline;">
+                                            <button class="waves-effect red lighten-1 btn" type="submit">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <%if(items[i+1]){%>
-                        <div class="col-md-6">
-                            <div class="card" style="width: 18rem;">
-                                <img src="<%=items[i].image%>" class="img-thumbnail" alt="">
-                                <div class="card-body">
-                                    <h5 class="card-title"><%=items[i+1].item%></h5>
-                                    <h6 class="card-subtitle mb-2">Quantity: <%=items[i+1].quantity%></h6>
-                                    <p class="card-text">Price: $<%=items[i+1].price%></p>
-                                    <a href="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>/edit" class="btn btn-warning">Edit</a>
-                                    <form action="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>?_method=DELETE" method="POST" style="display: inline;">
-                                        <button class="btn btn-danger" type="submit">Delete</button>
-                                    </form>
+                        <div class="col s12 m6">
+                            <div class="container">
+                                <div class="card hoverable">
+                                    <div class="card-image">
+                                        <img src="<%=items[i+1].image%>" alt="" class="responsive-image">
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="card-title"><%=items[i+1].item%></div>
+                                        <h5>Quantity: <%=items[i+1].quantity%></h5>
+                                        <h5>Price: $<%=items[i+1].price%></h5>
+                                    </div>
+                                    <div class="card-action">
+                                        <a class="waves-effect orange lighten-1 btn" href="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>/edit">Edit</a>
+                                        <form action="/customer/<%=currentUser.username%>/cart/<%=items[i+1].item%>?_method=DELETE" method="POST" style="display: inline;">
+                                            <button class="waves-effect red lighten-1 btn" type="submit">Delete</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <%}%>
-                </div>
-            <%}%>
-            <a href="/customer/<%=currentUser.username%>/checkout" class="btn btn-primary btn-large">Checkout</a>
+            <%}%> 
         <%}else{%>
-            <div class="alert alert-primary text-center">Cart is Empty</div>
+            <div class="alert alert-primary center-align">Cart is Empty</div>
         <%}%>
     </div>
 </div>

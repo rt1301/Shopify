@@ -1,53 +1,63 @@
 <%-include("partials/header.ejs")%>
-<div class="container my-4 text-center">
-    <div class="display-4">Edit Item</div>
+<div class="container my-4 center-align">
+    <h4>Edit Item</h4>
     <form action="/customer/<%=currentUser.username%>/cart/<%=products.item%>?_method=PUT" method="POST">
-        <div class="form-group">
-            <label for="Name">Item Name</label>
-            <input type="text" name="name" readonly  value="<%=products.item%>" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="Price">Price</label>
-            <input type="number" name="price" readonly value="<%=products.price%>" required min="0.5" step="0.1" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="">Quantity</label>
-            
-            <%if(Number(maxQuantity)>=3){%>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" value="<%=products.quantity%>" name="quantity" class="form-control quantity" min="1" max="3">
-                    <small>Max 3 units per Customer</small>
+        <div class="container center-align">
+            <div class="row">
+                <div class="input-field col s12">
+                    <h5>Item Name</h5>
+                    <input class="center-align" type="text" name="name" readonly  value="<%=products.item%>" class="form-control">
                 </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
-                    <p>Go <a href="/customer/<%=currentUser.username%>/cart">Back</a></p>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <h5>Price</h5>
+                    <input type="text" class="center-align" name="price" readonly value="$<%=products.price%>">
                 </div>
-            <%}else if(Number(maxQuantity) == 2){%>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" value="<%=products.quantity%>" name="quantity" class="form-control quantity" min="1" max="2">
-                    <small>Only 2 units left!</small>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
-                    <p>Go <a href="/customer/<%=currentUser.username%>/cart">Back</a></p>
-                </div>
-            <%}else if(Number(maxQuantity) == 1){%>
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input type="number" value="<%=products.quantity%>" name="quantity" class="form-control quantity" min="1" max="1">
-                    <small>Only 1 unit left!</small>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
-                    <p>Go <a href="/customer/<%=currentUser.username%>/cart">Back</a></p>
-                </div>
-            <%}else{%>
-                <div class="alert alert-primary" role="alert">
-                    Sorry Out of Stock!
-                </div>
-            <%}%>
+            </div>
+            <div class="row">
+                <%if(Number(maxQuantity)>=3){%>
+                    <div class="input-field col s12">
+                        <h5>Quantity</h5>
+                        <input class="center-align" type="number" value="<%=products.quantity%>" name="quantity" class="quantity" min="1" max="3">
+                        <small>Max 3 units per Customer</small>
+                    </div>
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                            <i class="material-icons right">send</i>
+                        </button>
+                        <p>Go <a href="/customer/<%=currentUser.username%>/cart">Back</a></p>
+                    </div>
+                <%}else if(Number(maxQuantity) == 2){%>
+                    <div class="input-field col s12">
+                        <h5>Quantity</h5>
+                        <input class="center-align" type="number" value="<%=products.quantity%>" name="quantity" class="quantity" min="1" max="2">
+                        <small>Only 2 units left!</small>
+                    </div>
+                    <div class="input-field col s12">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                            <i class="material-icons right">send</i>
+                        </button>
+                        <p>Go <a href="/customer/<%=currentUser.username%>/cart">Back</a></p>
+                    </div>
+                <%}else if(Number(maxQuantity) == 1){%>
+                    <div class="input-field col s12">
+                        <h5>Quantity</h5>
+                        <input class="center-align" type="number" value="<%=products.quantity%>" name="quantity" class="form-control quantity" min="1" max="1">
+                        <small>Only 1 unit left!</small>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                            <i class="material-icons right">send</i>
+                        </button>
+                        <p>Go <a href="/customer/<%=currentUser.username%>/cart">Back</a></p>
+                    </div>
+                <%}else{%>
+                    <div class="alert alert-primary" role="alert">
+                        Sorry Out of Stock!
+                    </div>
+                <%}%>
+            </div>
         </div>
     </form>
     </div>

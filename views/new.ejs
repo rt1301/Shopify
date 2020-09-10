@@ -1,42 +1,70 @@
 <%-include("partials/header.ejs")%>
 <div class="container mt-5">
-    <div class="display-4">Add a new Item</div>
-    <form action="/seller/<%=username%>/new" method="POST">
-        <div class="form-group">
-            <label for="Name">Item Name</label>
-            <input type="text" name="item[name]" placeholder="Item Name" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="description">Item Description</label>
-            <textarea name="item[description]"  cols="20" rows="5" class="form-control"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="image">Image URL</label>
-            <input type="text" name="item[image]" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label for="Price">Price</label>
-            <input type="number" name="item[price]" required min="0.5" step="0.1" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="">Quantity</label>
-            <input type="number" min="1" step="1" required name="item[quantity]" class="form-control">
-        </div>
-        <div class="form-group">
-            <label for="">Category</label>
-            <select name="item[category]" class="form-control">
-                <option value="Electronics">Electronics</option>
-                <option value="Clothing">Clothing</option>
-                <option value="Groceries">Groceries</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="">Seller's Name</label>
-            <input type="text" readonly name="item[sellerName]" value="<%=username%>" class="form-control">
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+    <h3 class="center-align">Add a new Item</h3>
+    <form action="/seller/<%=username%>/new" method="POST" class="my-5">
+        <div class="container">
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="">Item Name</label>
+                    <input type="text" name="item[name]" required class="form-control">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="">Item Description</label>
+                    <textarea id="textarea1" name="item[description]" required class="materialize-textarea"  cols="20" rows="5" ></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="">Image URL</label>
+                    <input type="text" name="item[image]"  required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="Price">Price</label>
+                    <input type="number" name="item[price]" required min="0.5" step="0.1">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="">Quantity</label>
+                    <input type="number" min="1" step="1" required name="item[quantity]">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <select name="category" required>
+                        <option value="" disabled selected>Category</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Clothing">Clothing</option>
+                        <option value="Groceries">Groceries</option>
+                    </select>
+                    <label for="">Category</label>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <label for="">Seller's Name</label>
+                    <input type="text" readonly name="item[sellerName]" value="<%=username%>">
+                </div>
+            </div>
+            <div class="row center-align">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
         </div>
     </form>
 </div>
+
+<script>
+$(document).ready(function(){
+    M.textareaAutoResize($('#textarea1'));
+    $('select').formSelect();
+});
+</script>
 <%-include("partials/footer.ejs")%>

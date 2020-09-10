@@ -1,27 +1,54 @@
 <%-include("partials/header.ejs")%>
-<div class="container my-4">
-    <div class="display-4 text-center">Welcome <%=user.username%></div>
-    <div class="jumbotron jumbotron-fluid">
-        <div class="display-3">Past Orders</div>
-        <hr class="my-3">
-        <a href="/customer/<%=user.username%>/pastOrders" class="btn btn-primary">Past Orders</a>
+<div class="container">
+    <h4 class="center-align">Welcome <%=user.username%></h4>
+    <div class="container center-align">
+        <div class="row">
+            <div class="col m12">
+              <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title">Past Orders</span>
+                </div>
+                <div class="card-action hoverable">
+                    <a href="/customer/<%=user.username%>/pastOrders" class="waves-effect waves-light btn">Past Orders</a>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
 </div>
-<div class="container mb-5">
-    <div class="display-4">Check out New Products!</div>
+<div class="container">
+    <h4 class="center-align z-dept-3">Check out New Products</h4>
     <div class="row">
-        <div class="col-md-4 product">
-            <img class="img-thubmnail" id="electronics"  src="https://www.indcareer.com/files/B.E%20Electronics%20&%20Power%20Engineering.jpg" alt="">
-            <a class="product-link" href="/customer/<%=user.username%>/products/Electronics">Electronics</a>
+        <div class="col s12 m4">
+          <div class="card hoverable">
+            <div class="card-image">
+              <img class="responsive-image" src="https://www.indcareer.com/files/B.E%20Electronics%20&%20Power%20Engineering.jpg">
+            </div>
+            <div class="card-action center-align">
+                <a class="waves-effect waves-light btn-large" href="/customer/<%=user.username%>/products/Electronics">Electronics <i class="material-icons right">devices_other</i></a>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4 product">
-            <img class="img-thumbnail" id="clothing" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80" alt="">
-            <a class="product-link" href="/customer/<%=user.username%>/products/Clothing">Clothing</a>
+        <div class="col s12 m4">
+          <div class="card hoverable">
+            <div class="card-image">
+              <img class="responsive-image" src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80">
+            </div>
+            <div class="card-action center-align">
+                <a class="waves-effect waves-light btn-large" href="/customer/<%=user.username%>/products/Electronics">Fashion <i class="fas fa-tshirt"></i></a>
+            </div>
+          </div>
         </div>
-        <div class="col-md-4 product">
-            <img src="https://media.self.com/photos/599c997a774b667d3bbe1214/master/pass/groceries-family-month.jpg" class="img-thumbnail" id="groceries" alt="">
-            <a class="product-link"  href="/customer/<%=user.username%>/products/Groceries">Groceries</a>
+        <div class="col s12 m4">
+          <div class="card hoverable">
+            <div class="card-image">
+              <img class="responsive-image" src="https://media.self.com/photos/599c997a774b667d3bbe1214/master/pass/groceries-family-month.jpg">
+            </div>
+            <div class="card-action center-align">
+                <a class="waves-effect waves-light btn-large" href="/customer/<%=user.username%>/products/Electronics">Groceries <i class="fas fa-carrot"></i></a>
+            </div>
+          </div>
         </div>
-    </div>
+      </div>
 </div>
 <%-include("partials/footer.ejs")%>
