@@ -86,6 +86,10 @@
 {
     margin: 0 auto;
 }
+.p-5
+{
+    padding: 1.5rem;
+}
 .alert
 {
     position: relative;

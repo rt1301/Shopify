@@ -160,13 +160,18 @@ app.get("/seller/:username/orders",isLoggedIn,(req, res)=>{
         }
         else
         {
+            var price = [];
+            var date = [];
             for(var i=0;i<arrivedOrders.length;i++)
             {
                 seller.history[i] = arrivedOrders[i];
+                price[i] = arrivedOrders[i].price;
+                date[i] = arrivedOrders[i].date.toString();
+                date[i] = date[i].substring(0,10).substring(4,7);
             }
             seller.markModified('history');
             seller.save();
-            res.render("arrived_orders",{items:seller.history});
+            res.render("arrived_orders",{items:seller.history,price:price,date:date});
             arrivedOrders = [];
         }
     });
@@ -239,7 +244,9 @@ app.post("/customer/:username/products/:type/:id",isLoggedIn,(req, res)=>{
                                 date: new Date,
                                 id: updatedItem._id,
                                 seller: updatedItem.sellerName,
-                                image: updatedItem.image
+                                image: updatedItem.image,
+                                customer: foundUser[0].username,
+                                customerEmail: foundUser[0].email
                             }
                             foundUser[0].productsInCart.push(data);
                             foundUser[0].save((err,updatedUser)=>{
@@ -331,6 +338,8 @@ app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
             date: new Date,
             image:  itemImage,
             seller: itemSeller,
+            customer: req.user.username,
+            customerEmail:req.user.email,
             id: itemId
         });
     }

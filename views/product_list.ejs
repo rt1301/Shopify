@@ -1,137 +1,141 @@
 <%-include("partials/header.ejs")%>
 <h3 class="center-align">Check out our <%=type%> Section!</h3>
 <%if(items.length!=0){%>
-    <%for(var i=0;i<items.length-1;i++){%>
+    <%for(var i=0;i<items.length-1;i+=2){%>
         <div class="row">
-            <div class="col s12 m6">
-                <div class="container">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="<%=items[i].image%>" class="responsive-image" alt="">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title"><%=items[i].name%></div>
-                            <p><%=items[i].description%></p>
-                            <p>Price: $<span class="price" id="price<%=i%>"><%=items[i].price%></span></p>
-                        </div>
-                        <div class="card-action">
-                            <div class="container">
-                                <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i]._id%>" method="POST">
-                                    <%if(Number(items[i].quantity)>=3){%>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                            <h5>Quantity</h5>
-                                            <input type="number" name="quantity" class="quantity" min="1" max="3">
-                                            <small>Max 3 units per Customer</small>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
-                                            </div>
-                                        </div>
-                                    <%}else if(Number(items[i].quantity) == 2){%>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                            <h5>Quantity</h5>
-                                            <input type="number" name="quantity" class="quantity" min="1" max="3">
-                                            <small>Only 2 units left</small>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
-                                            </div>
-                                        </div>
-                                    <%}else if(Number(items[i].quantity) == 1){%>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                            <h5>Quantity</h5>
-                                            <input type="number" name="quantity" class="quantity" min="1" max="3">
-                                            <small>Only 1 unit left</small>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
-                                            </div>
-                                        </div>
-                                    <%}else{%>
-                                        <div class="alert alert-primary" role="alert">
-                                            Sorry Out of Stock!
-                                        </div>
-                                    <%}%>
-                                </form>
+            <div class="container">
+                <div class="col s12 m6">
+                    <div class="container">
+                        <div class="card hoverable">
+                            <div class="card-image">
+                                <img src="<%=items[i].image%>" class="responsive-image" alt="">
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col s12 m6">
-                <div class="container">
-                    <div class="card hoverable">
-                        <div class="card-image">
-                            <img src="<%=items[i+1].image%>" class="responsive-image" alt="">
-                        </div>
-                        <div class="card-content">
-                            <div class="card-title"><%=items[i+1].name%></div>
-                            <p><%=items[i+1].description%></p>
-                            <p>Price: $<span class="price" id="price<%=i%>"><%=items[i+1].price%></span></p>
-                        </div>
-                        <div class="card-action">
-                            <div class="container">
-                                <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i]._id%>" method="POST">
-                                    <%if(Number(items[i+1].quantity)>=3){%>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                            <h5>Quantity</h5>
-                                            <input type="number" name="quantity" class="quantity" min="1" max="3">
-                                            <small>Max 3 units per Customer</small>
+                            <div class="card-content">
+                                <div class="card-title"><%=items[i].name%></div>
+                                <p><%=items[i].description%></p>
+                                <p>Price: $<span class="price" id="price<%=i%>"><%=items[i].price%></span></p>
+                            </div>
+                            <div class="card-action">
+                                <div class="container">
+                                    <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i]._id%>" method="POST">
+                                        <%if(Number(items[i].quantity)>=3){%>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                <h5>Quantity</h5>
+                                                <input type="number" name="quantity" class="quantity" min="1" max="3">
+                                                <small>Max 3 units per Customer</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    <%}else if(Number(items[i+1].quantity) == 2){%>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                            <h5>Quantity</h5>
-                                            <input type="number" name="quantity" class="quantity" min="1" max="3">
-                                            <small>Only 2 units left</small>
+                                        <%}else if(Number(items[i].quantity) == 2){%>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                <h5>Quantity</h5>
+                                                <input type="number" name="quantity" class="quantity" min="1" max="3">
+                                                <small>Only 2 units left</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    <%}else if(Number(items[i+1].quantity) == 1){%>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                            <h5>Quantity</h5>
-                                            <input type="number" name="quantity" class="quantity" min="1" max="3">
-                                            <small>Only 1 unit left</small>
+                                        <%}else if(Number(items[i].quantity) == 1){%>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                <h5>Quantity</h5>
+                                                <input type="number" name="quantity" class="quantity" min="1" max="3">
+                                                <small>Only 1 unit left</small>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="input-field col s12">
-                                                <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    <%}else{%>
-                                        <div class="container">
+                                        <%}else{%>
                                             <div class="alert alert-primary" role="alert">
                                                 Sorry Out of Stock!
                                             </div>
-                                        </div>
-                                    <%}%>
-                                </form>
+                                        <%}%>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+               <%if(items[i+1]){%>
+                 <div class="col s12 m6">
+                    <div class="container">
+                        <div class="card hoverable">
+                            <div class="card-image">
+                                <img src="<%=items[i+1].image%>" class="responsive-image" alt="">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title"><%=items[i+1].name%></div>
+                                <p><%=items[i+1].description%></p>
+                                <p>Price: $<span class="price" id="price<%=i%>"><%=items[i+1].price%></span></p>
+                            </div>
+                            <div class="card-action">
+                                <div class="container">
+                                    <form action="/customer/<%=user.username%>/products/<%=type%>/<%=items[i+1]._id%>" method="POST">
+                                        <%if(Number(items[i+1].quantity)>=3){%>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                <h5>Quantity</h5>
+                                                <input type="number" name="quantity" class="quantity" min="1" max="3">
+                                                <small>Max 3 units per Customer</small>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        <%}else if(Number(items[i+1].quantity) == 2){%>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                <h5>Quantity</h5>
+                                                <input type="number" name="quantity" class="quantity" min="1" max="3">
+                                                <small>Only 2 units left</small>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        <%}else if(Number(items[i+1].quantity) == 1){%>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                <h5>Quantity</h5>
+                                                <input type="number" name="quantity" class="quantity" min="1" max="3">
+                                                <small>Only 1 unit left</small>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <button class="btn waves-effect waves-light" type="submit" name="action">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        <%}else{%>
+                                            <div class="container">
+                                                <div class="alert alert-primary" role="alert">
+                                                    Sorry Out of Stock!
+                                                </div>
+                                            </div>
+                                        <%}%>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <%}%>
             </div>
         </div>
     <%}%>
