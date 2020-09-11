@@ -5,12 +5,11 @@ var express                 = require('express'),
     flash                   = require('connect-flash'),
     methodOverride          = require('method-override'),
     passport				= require('passport'),
-	LocalStrategy			= require('passport-local'),
+    LocalStrategy			= require('passport-local'),
     passportLocalMongoose 	= require('passport-local-mongoose'),
     Item                    = require("./models/items.js"),
     Payment                 = require("./models/payment.js"),
     User 					= require("./models/user.js");
-
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect("mongodb://localhost:27017/shopify",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify:false });
@@ -29,6 +28,16 @@ app.use(function(req, res, next)
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     res.locals.currentUser = req.user;
+    Item.find({},(err,foundItems)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            res.locals.searchItems = foundItems;
+        }
+    });
     next();
  });
 passport.use(new LocalStrategy(User.authenticate()));

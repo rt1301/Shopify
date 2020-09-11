@@ -13,42 +13,59 @@
      <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav>
-    <div class="nav-wrapper">
-      <div class="container">
-        <a href="/" class="brand-logo">Shopify <i class="fas fa-shopping-cart"></i></a>
-      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      <ul class="right hide-on-med-and-down">
+  <div class="row">
+    <div class="col s12">
+      <nav>
+        <div class="nav-wrapper">
+          <div class="container">
+            <a href="/" class="brand-logo">Shopify <i class="fas fa-shopping-cart"></i></a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul class="right hide-on-med-and-down">
+            <%if(currentUser){%>
+              <%if(currentUser.role === 'Customer'){%>
+                <li id="searchContent">
+                  <div class="input-field" id="searchInput" style="height: max-content;" data-item='<%=JSON.stringify(searchItems)%>' data-user="<%=currentUser.username%>">
+                    <input id="search" type="search" required>
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons">close</i>
+                  </div>
+                  <div id="displayItems"></div>
+                </li>
+              <%}%>
+              <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>">Home</a></li>
+              <%if(currentUser.role === 'Customer'){%>
+                <li><a href="/customer/<%=currentUser.username%>/cart">Cart</a></li>
+              <%}%>
+              <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>"><%=currentUser.username%></a></li>
+            <%}%>
+            <li><a href="/logout">LogOut</a></li>
+          </ul>
+          </div>
+        </div>
+      </nav>
+    
+      <ul class="sidenav" id="mobile-demo">
         <%if(currentUser){%>
           <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>">Home</a></li>
-          <%if(currentUser.role === 'Customer'){%>
-            <li><a href="/customer/<%=currentUser.username%>/cart">Cart</a></li>
-          <%}%>
+          
           <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>"><%=currentUser.username%></a></li>
-        <%}%>
-        <li><a href="/logout">LogOut</a></li>
+          <%}%>
+          <li><a href="/logout">LogOut</a></li>
       </ul>
+      <div class="flash-container center-align">
+        <%if(error && error.length>0){%>
+            <div class="container my-5">
+              <div class="alert alert-danger" role="alert"><%=error%></div>
+            </div>
+        <%}%>
+        <%if(success && success.length>0){%>
+            <div class="container my-5">
+              <div class="alert alert-success" role="alert"><%=success%></div>
+            </div>
+        <%}%>	
       </div>
     </div>
-  </nav>
-
-  <ul class="sidenav" id="mobile-demo">
-    <%if(currentUser){%>
-      <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>">Home</a></li>
-      
-      <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>"><%=currentUser.username%></a></li>
-      <%}%>
-      <li><a href="/logout">LogOut</a></li>
-  </ul>
-  <div class="flash-container center-align">
-    <%if(error && error.length>0){%>
-        <div class="container my-5">
-          <div class="alert alert-danger" role="alert"><%=error%></div>
-        </div>
-    <%}%>
-    <%if(success && success.length>0){%>
-        <div class="container my-5">
-          <div class="alert alert-success" role="alert"><%=success%></div>
-        </div>
-    <%}%>	
   </div>
+  <div class="row center-align">
+  <div class="col s12">
+  
