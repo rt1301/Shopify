@@ -5,12 +5,11 @@ var express                 = require('express'),
     flash                   = require('connect-flash'),
     methodOverride          = require('method-override'),
     passport				= require('passport'),
-	LocalStrategy			= require('passport-local'),
+    LocalStrategy			= require('passport-local'),
     passportLocalMongoose 	= require('passport-local-mongoose'),
     Item                    = require("./models/items.js"),
     Payment                 = require("./models/payment.js"),
     User 					= require("./models/user.js");
-
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect("mongodb://localhost:27017/shopify",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify:false });
@@ -29,6 +28,16 @@ app.use(function(req, res, next)
     res.locals.error = req.flash("error");
     res.locals.success = req.flash("success");
     res.locals.currentUser = req.user;
+    Item.find({},(err,foundItems)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            res.locals.searchItems = foundItems;
+        }
+    });
     next();
  });
 passport.use(new LocalStrategy(User.authenticate()));
@@ -160,13 +169,18 @@ app.get("/seller/:username/orders",isLoggedIn,(req, res)=>{
         }
         else
         {
+            var price = [];
+            var date = [];
             for(var i=0;i<arrivedOrders.length;i++)
             {
                 seller.history[i] = arrivedOrders[i];
+                price[i] = arrivedOrders[i].price;
+                date[i] = arrivedOrders[i].date.toString();
+                date[i] = date[i].substring(0,10).substring(4,7);
             }
             seller.markModified('history');
             seller.save();
-            res.render("arrived_orders",{items:seller.history});
+            res.render("arrived_orders",{items:seller.history,price:price,date:date});
             arrivedOrders = [];
         }
     });
@@ -239,7 +253,9 @@ app.post("/customer/:username/products/:type/:id",isLoggedIn,(req, res)=>{
                                 date: new Date,
                                 id: updatedItem._id,
                                 seller: updatedItem.sellerName,
-                                image: updatedItem.image
+                                image: updatedItem.image,
+                                customer: foundUser[0].username,
+                                customerEmail: foundUser[0].email
                             }
                             foundUser[0].productsInCart.push(data);
                             foundUser[0].save((err,updatedUser)=>{
@@ -331,6 +347,8 @@ app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
             date: new Date,
             image:  itemImage,
             seller: itemSeller,
+            customer: req.user.username,
+            customerEmail:req.user.email,
             id: itemId
         });
     }
@@ -350,15 +368,23 @@ app.get("/customer/:username/cart",isLoggedIn,(req,res)=>{
             
         }
     });
-    if(repObj.concat(obj).length!==0)
-    {
-        res.render("cart",{items:repObj.concat(obj)});
-    }
-    else
-    {
-        // console.log(products);
-        res.render("cart",{items:products});
-    }
+    Item.find({},(err,foundItems)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            if(repObj.concat(obj).length!==0)
+            {
+                res.render("cart",{items:repObj.concat(obj),searchItems:foundItems});
+            }
+            else
+            {
+                res.render("cart",{items:products,searchItems:foundItems});
+            }
+        }
+    })
 });
 // Edit Cart Items route
 app.get("/customer/:username/cart/:itemName/edit",isLoggedIn,(req, res)=>{

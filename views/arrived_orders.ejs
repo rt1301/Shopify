@@ -1,12 +1,17 @@
 <%-include("partials/header.ejs")%>
-<div class="display-4 text-center">Arrived Orders for <%=currentUser.username%></div>
+<h3 class="center-align">Arrived Orders for <%=currentUser.username%></h3>
+<div class="container center-align my-4">
+    <canvas id="myChart"></canvas>
+</div>
 <div class="container text-center my-4">
     <%if(items.length!==0){%>
         <%for(var i=0;i<items.length;i++){%>
             <%if(items[i].item){%>
              <div class="card hoverable">
-                 <div class="card-body">
+                 <div class="card-body center-align p-5">
                      <h5 class="card-title"><%=items[i].item%></h5>
+                     <h5>Customer: <%=items[i].customer%></h5>
+                     <h5>Customer-Email: <%=items[i].customerEmail%></h5>
                      <h6>Quantity: <%=items[i].quantity%></h6>
                      <h6>Price: $ <%=items[i].price%></h6>
                      <h6>Ordered On: <span id="date"><%=items[i].date%></span></h6>
@@ -20,4 +25,40 @@
         </div>
     <%}%>
 </div>
+<%var price = price;
+var date = date;
+var length = items.length;
+%>
+<script>
+    var myChart = document.getElementById("myChart").getContext('2d');
+    var price = [<%=price%>];
+    var date = '<%=date%>'.split(',');
+    var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var finalPrice = [0,0,0,0,0,0,0,0,0,0,0,0];
+    for(var j=0;j<<%=length%>;j++)
+    {
+            var index = months.indexOf(date[j]);
+            finalPrice[index]+=  price[j];
+    }
+    var sellerData = new Chart(myChart,{
+        type:'bar',
+        data:{
+            labels: months,
+            datasets: [
+                {
+                    label: "Price",
+                    data: finalPrice,
+                    backgroundColor: ['rgba(242, 94, 106, 0.7)','rgba(107, 182, 191, 0.7)','rgba(242, 230, 215, 0.7)','rgba(216, 146, 121, 0.7)','rgba(114, 37, 37, 0.7)','rgba(216, 26, 41, 0.7)','rgba(114, 9, 107, 0.7)','rgba(28, 165, 115, 0.7)','rgba(242, 192, 99, 0.7)','rgba(242, 120, 109, 0.7)','rgba(107, 134, 140, 0.7)','rgba(242, 162, 92, 0.7)','rgba(216, 178, 145, 0.7)'],
+                }
+            ]
+        },
+        options: {
+        title:{
+            display:true,
+            text: "Amount Sold",
+            fontSize: 30
+        },
+    }
+    });
+</script>
 <%-include("partials/footer.ejs")%>
