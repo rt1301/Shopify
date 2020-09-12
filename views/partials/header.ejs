@@ -24,11 +24,15 @@
             <%if(currentUser){%>
               <%if(currentUser.role === 'Customer'){%>
                 <li id="searchContent">
-                  <div class="input-field" id="searchInput" style="height: max-content;" data-item='<%=JSON.stringify(searchItems)%>' data-user="<%=currentUser.username%>">
-                    <input id="search" type="search" required>
-                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                    <i class="material-icons">close</i>
-                  </div>
+                 <div class="row">
+                   <div class="col s12 show-on-large">
+                    <div class="input-field" id="searchInput" style="height: max-content;" data-item='<%=JSON.stringify(searchItems)%>' data-user="<%=currentUser.username%>">
+                      <input id="search" type="search" required>
+                      <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                      <i class="material-icons">close</i>
+                    </div>
+                   </div>
+                 </div>
                   <div id="displayItems"></div>
                 </li>
               <%}%>
@@ -49,6 +53,9 @@
           <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>">Home</a></li>
           
           <li><a href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>"><%=currentUser.username%></a></li>
+          <%if(currentUser.role === 'Customer'){%>
+            <li><a href="/customer/<%=currentUser.username%>/cart">Cart</a></li>
+          <%}%>
           <%}%>
           <li><a href="/logout">LogOut</a></li>
       </ul>

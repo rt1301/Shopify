@@ -1,25 +1,12 @@
+$(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
 if($("#searchInput").length!==0)
 {
     var searchItems = JSON.parse($("#searchInput").attr("data-item"));
     var currentUser = $("#searchInput").attr("data-user"); 
     var searchBar   = $("#search");
     var itemContainer = $("#displayItems");
-   /*  searchBar.keypress((e)=>{
-        const searchString = e.target.value;
-        let filterItem   = searchItems.filter(item=>{
-            return(item.name.includes(searchString) || item.category.includes(searchString) || item.description.includes(searchString));
-        });
-        if(searchString.length === 0)
-        {
-            itemContainer.html('');
-            filterItem = [];
-            
-        }
-        else
-        {
-            displayItems(filterItem);
-        }
-    }); */
     document.getElementById("search").addEventListener('input',(e)=>{
         const searchString = e.target.value;
         let filterItem   = searchItems.filter(item=>{
