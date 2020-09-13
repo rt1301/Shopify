@@ -48,7 +48,10 @@ app.use(express.static(__dirname + "/public"));
 app.use(body.urlencoded({extended : true}));
 app.set("view engine","ejs");
 // Root Route
-app.get("/",isLoggedIn,(req, res)=>{
+app.get("/",(req, res)=>{
+   res.render("landing_page");
+});
+app.get("/dashboard",isLoggedIn,(req,res)=>{
     if(req.user.role === "Customer")
     {
         res.redirect("/customer/"+req.user.username);
@@ -587,7 +590,7 @@ app.post("/login",passport.authenticate("local",
 {
 failureRedirect: "/login",
 failureFlash:"Incorrect Username or Password!",
-successRedirect:"/",
+successRedirect:"/dashboard",
 }),function(req, res)
 {
     req.flash("success","You are logged in as " + req.user.username);
