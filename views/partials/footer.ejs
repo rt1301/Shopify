@@ -1,5 +1,30 @@
 </div>
 </div>
+<%if(currentUser){%>
+    <footer class="page-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col l6 s12">
+              <h5 class="white-text">Shopify</h5>
+            </div>
+            <div class="col l4 offset-l2 s12">
+              <ul>
+                <li><a class="grey-text text-lighten-3" href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>">Home</a></li>
+                <%if(currentUser.role === 'Customer'){%>
+                    <li><a class="grey-text text-lighten-3" href="/customer/<%=currentUser.username%>/cart">Cart</a></li>
+                  <%}%>
+                  <li><a class="grey-text text-lighten-3"  href="/<%=currentUser.role.toLowerCase()%>/<%=currentUser.username%>"><%=currentUser.username%></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer-copyright">
+          <div class="container">
+          © 2020 Copyright Shopify
+          </div>
+        </div>
+      </footer>
+<%}%>
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="/js/script.js"></script>
