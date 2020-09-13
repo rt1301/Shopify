@@ -12,7 +12,7 @@ var express                 = require('express'),
     User 					= require("./models/user.js");
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect("mongodb://localhost:27017/shopify",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify:false });
+mongoose.connect("mongodb+srv://rt1301:radhavilla1301@cluster0.hc7tc.mongodb.net/shopify?retryWrites=true&w=majority",{ useNewUrlParser: true, useUnifiedTopology: true,useFindAndModify:false });
 app.use(flash());
 // PASSPORT CONFIG
 app.use(require('express-session')({
