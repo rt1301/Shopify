@@ -49,7 +49,14 @@ app.use(body.urlencoded({extended : true}));
 app.set("view engine","ejs");
 // Root Route
 app.get("/",(req, res)=>{
-   res.render("landing_page");
+   if(req.user)
+   {
+       res.redirect("/dashboard");
+   }
+   else
+   {
+    res.render("landing_page");
+   }
 });
 app.get("/dashboard",isLoggedIn,(req,res)=>{
     if(req.user.role === "Customer")
@@ -512,7 +519,17 @@ app.delete("/customer/:username/cart/:item",isLoggedIn,(req, res)=>{
 });
 // Checkout Page
 app.get("/customer/:username/checkout",isLoggedIn,(req, res)=>{
-    res.render("checkout",{products:req.user.productsInCart});
+    Item.find({},(err, searchItems)=>{
+        if(err)
+        {
+            console.log(err);
+        }
+        else
+        {
+            res.render("checkout",{products:req.user.productsInCart,searchItems:searchItems});
+        }
+    })
+    
 });
 app.post("/customer/:username/checkout/payment",isLoggedIn,(req, res)=>{
     var paymentDetails = req.body.payment;
